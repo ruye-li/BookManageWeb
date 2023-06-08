@@ -18,9 +18,9 @@
 
 | 学号         | 学生姓名 | 具体分工                                           | 成绩 |
 | ------------ | -------- | -------------------------------------------------- | ---- |
-| 202103160006 | 邹雪燕   |                                                    |      |
+| 202103160006 | 邹雪燕   | 编写课程设计的数据库设计                           |      |
 | 202103160007 | 周明源   | 编写前后端代码，定义数据库并进行功能测试和需求测试 |      |
-| 202103160008 | 管小风   |                                                    |      |
+| 202103160008 | 管小风   | 编写课程设计的应用系统设计                         |      |
 
 # 数据库设计
 
@@ -28,17 +28,19 @@
 
 ### 问题描述
 
-图书管理系统是为图书馆或者其他借阅机构设计的一种软件系统，主要用于读者进行图书的借阅、归还、查询等操作，并辅助管理员进行图书的分类、管理、统计等工作。随着社会信息化的发展和数字化技术的进步，图书管理系统也逐渐向着智能化、自动化、网络化等方向发展。
+图书管理系统是一种数字化的图书馆管理系统，它能够自动化、智能化地管理图书馆的各项业务。传统的图书馆管理方式已经无法满足各类读者对于服务质量和效率的追求，因此图书管理系统成为了图书馆不可或缺的一部分，也逐渐成为了高校、企事业单位等机构内部管理的重要工具。
 
-通过图书管理系统，读者可以方便快捷地查询和借阅图书，管理员可以实现对图书的自动管理和快速统计，从而提高图书馆或者其他借阅机构的服务水平和效率。
+随着社会信息技术的不断发展和进步，图书管理系统的功能和性能也得到了不断的提升。现代的图书管理系统可以支持在线查询、预约、借还书等多种功能，使得读者能够更加便捷、快速地获取所需资源。同时，图书管理系统也可以帮助图书馆实现自动化、智能化管理，提高工作效率和服务质量。
+
+在图书管理系统中，数据库是非常重要的一环。数据库存储了图书馆大量的信息数据，包括书籍信息、读者信息、借阅记录、预约记录等，并且这些数据之间存在复杂的关系。因此，在数据库设计阶段需要考虑如何优化数据模型，确保数据结构合理、高效、易于维护。同时，需要采取有效措施来确保数据的安全性，如加密、权限管理等。
+
+总之，图书管理系统是数字化时代下图书馆管理工作的必然趋势，也是现代化单位内部管理的重要组成部分。通过合理的数据库设计和优化，可以提高图书管理系统的工作效率和服务质量，满足读者对于服务质量和效率的需求。
 
 ### 系统功能描述
 
-进行新书入库、现有图书信息修改以及删除
+能够实现对读者信息的查询和修改
 
-能够实现对读者基本信息的查询和编辑管理
-
-能够实现借阅信息的查询功能
+能够实现对借阅信息的查询
 
 能够存储一定数量的图书信息,并方便有效的进行相应的书籍数据操作和管理，这主要包括：
 
@@ -48,17 +50,17 @@
 
 ### 业务用例图
 
-![](https://image.itbaima.net/images/156/image-2023060614714178.png)
+![](https://image.itbaima.net/images/156/image-20230608122792490.png)
 
 ### 安全性与完整性方面的要求
 
 认证和授权：只有授权用户可以访问数据库，并根据其角色和权限级别限制其可执行的操作。
 
-完整性约束：在设计数据库模式时需要定义适当的完整性约束以确保数据的正确性和一致性。例如，定义外键约束以确保引用关系的完整性。
+完整性约束：在设计数据库模式时需要定义适当的完整性约束以确保数据的正确性和一致性。例如，定义外键约束以确保引用关系的完整性，定义用户自定义完整性以确保数据的正确性。
 
 防止SQL注入攻击：应该使用参数化查询或存储过程来防止恶意攻击者通过输入恶意代码来破坏数据库。
 
-加密：在传输和保存敏感信息（如密码）时，必须使用加密算法保护。
+加密：在传输和保存敏感信息（如密码）时，使用加密算法保护。
 
 备份和恢复：定期备份数据库，并测试恢复流程以确保成功恢复数据。
 
@@ -146,7 +148,7 @@
 ### 数据库的创建
 
 ```sql
-USE master;
+USE book_manage;
 
 IF EXISTS (SELECT *
             FROM sysdatabases
@@ -166,7 +168,7 @@ END
 
 GO
 
-USE DIMS;
+USE book_manage;
 
 CREATE USER dba FOR LOGIN dba WITH DEFAULT_SCHEMA = dbo;
 
@@ -233,11 +235,29 @@ create definer = root@localhost trigger t
     DELETE FROM borrow WHERE old.sid = borrow.sid;
 ```
 
+admin表：
+
+![admin表](https://image.itbaima.net/images/156/image-20230608127907041.png)
+
+borrow表：
+
+![](https://image.itbaima.net/images/156/image-2023060812597970.png)
+
+book表：
+
+![](https://image.itbaima.net/images/156/image-20230608128092600.png)
+
+student表：
+
+![](https://image.itbaima.net/images/156/image-2023060812310491.png)
+
 ## 数据库运行和维护
 
 数据库应用系统经过试运行后即可投入正式运行。
 
 在数据库系统运行过程中必须不断地对其进行评估、调整与修改。
+
+本系统仅为一个小demo，所以并没有正式运行，不需要进行维护。
 
 # 应用系统设计
 
@@ -245,17 +265,17 @@ create definer = root@localhost trigger t
 
 网络架构：B/S 模式 (易开发、易维护、易扩展)
 
-前端管理页面模板：基于 Bootstrap 前端框架的管理系统页面模板
+前端页面模板：基于 Bootstrap 前端框架的管理系统页面模板
 
-WEB 容器：Tomcat10
+后端使用框架：Servlet+Mybatis+Thymeleaf
 
-包管理工具：Maven
+WEB容器：Tomcat10
 
-后端使用到的框架：Servlet+Mybatis+Thymeleaf
+项目管理工具：Maven
 
-开发环境及工具：IntelliJ IDEA、Navicat、Google Chrome
+开发工具：IntelliJ IDEA、Navicat、Google Chrome
 
-存储数据库：MySQL数据库
+数据库：MySQL数据库
 
 生产服务环境：Windows 10
 
@@ -300,13 +320,13 @@ WEB 容器：Tomcat10
 
 [IDEA配置Tomcat Server](https://www.cnblogs.com/merray/p/12698810.html)
 
-## 创建一个新的Web项目
+## 创建一个新的 Web 项目
 
 新建一个名为 `BookManagerWeb` 的 `Jakarta EE`项目，模板选择 Web 应用程序，应用程序选择 Tomcat 10.1.7，构建系统选择 Maven。
 
 ![](https://image.itbaima.net/images/156/image-20230606148896835.png)
 
-## Maven导包,配置pom.xml
+## Maven 导入依赖（pom.xml）
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -382,6 +402,85 @@ WEB 容器：Tomcat10
 </project>
 ```
 
+## 配置 Mybatis
+
+在 `resource` 目录下，新建一个名为 `mybatis-config.xml` 的文件：
+
+```xml
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="logImpl" value="NO_LOGGING"/>
+    </settings>
+    <typeAliases>
+        <package name="com.book.entity"/>
+    </typeAliases>
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/book_manage"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <package name="com.book.dao"/>
+    </mappers>
+</configuration>
+```
+
+在`utils`工具包中新建`MybatisUtil`工具类：
+
+```java
+package com.book.utils;
+
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+
+import java.io.IOException;
+
+public class MybatisUtil {
+    private static SqlSessionFactory sqlSessionFactory;
+
+    static {
+        try {
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config.xml"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static SqlSession getSession() {
+        return sqlSessionFactory.openSession(true);
+    }
+}
+
+```
+
+## 将前端模板加入项目
+
+将 css、js、font、image 等静态资源放入`webapp\static`目录下，然后根据需求将HTML页面放入`resource`目录下。
+
+## 编写后端
+
+为了使得整体的代码简洁高效，我们严格遵守三层架构模式：
+
+![img](https://s2.loli.net/2023/03/06/GuxJ2UWFgkITAlS.png)
+
+表示层只做UI，包括接受请求和相应，给模板添加上下文，以及进行页面的解析，最后响应给浏览器；业务逻辑层才是用于进行数据处理的地方，表示层需要向逻辑层索要数据，才能将数据添加到模板的上下文中；数据访问层一般就是连接数据库，包括增删改查等基本的数据库操作，业务逻辑层如果需要从数据库取数据，就需要向数据访问层请求数据。
+
+贯穿三大层次的当属实体类了，我们还需要创建对应的实体类进行数据的封装，以便于在三层架构中进行数据传递。
+
 # 测试及验收
 
 ## 界面测试
@@ -444,7 +543,7 @@ WEB 容器：Tomcat10
 
    参考：飞书云文档。
 
-3. 前端鉴权不太会。
+3. 鉴权不太会。
 
 ## 体会和心得
 
@@ -452,14 +551,7 @@ WEB 容器：Tomcat10
 
 另外，在进行高级语言应用开发和数据库交互时，我们需要了解各种编程语言中的数据库API，如Java中的JDBC、Python中的SQLAlchemy等。这些API可以方便地与数据库进行交互，并提供各种操作数据库的接口。同时，我们还需了解如何安全地进行数据交换，例如防止SQL注入等攻击。
 
-在进行web开发时，我们需要了解基本的web开发知识和技术，例如HTML、CSS、JavaScript、PHP等，同时还需要一定的服务器端开发经验。在这个过程中，我们需要注意网络安全问题，例如防止XSS攻击和CSRF攻击等。
-
-一个好的数据库课程设计应该包括以下几个方面：
-
-1. 实际问题：设计过程中要尽可能考虑实际问题，例如一个小型超市销售管理系统、一个酒店管理系统等等。这样设计出来的系统会更加实用，能够应对实际问题。
-2. 数据库设计：在设计数据库时需要考虑到数据表之间的关系，关键字、索引等等。需要设计出一个完整、规范、易于维护的数据库，能够满足实际需求。
-3. 编程语言：与数据库交互时，需要使用编程语言来操作数据库，例如使用Java、Python等。需要了解基本语法，以及如何使用数据库驱动连接数据库并进行操作。
-4. Web开发：如果设计的系统需要通过Web访问，就需要对Web开发有一定的了解，包括HTML、CSS、JavaScript等前端技术，以及ASP.NET、Spring MVC等后端技术。
+在进行前端开发时，我们需要了解基本的前端开发知识和技术，例如HTML、CSS、JavaScript、Jquery等，同时还需要一定的服务器端开发经验。在这个过程中，我们需要注意网络安全问题，例如防止XSS攻击和CSRF攻击等。
 
 在完成数据库课程设计过程中，我们也遇到了不少问题和困难。例如：
 

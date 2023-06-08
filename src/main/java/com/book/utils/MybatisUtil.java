@@ -7,11 +7,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import java.io.IOException;
 
-/**
- * @Author: 周明源
- * @Date: 2023-03-12 12:45
- * @Description: Mybatis工具类
- **/
 
 public class MybatisUtil {
     private static SqlSessionFactory sqlSessionFactory;
